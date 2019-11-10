@@ -86,9 +86,17 @@ celerybeat-schedule
 .venv
 env/
 venv/
+venv37/
 ENV/
 env.bak/
 venv.bak/
+
+# Serverless
+.serverless
+
+# Node
+node_modules/
+package-lock.json
 
 # Spyder project settings
 .spyderproject
@@ -102,3 +110,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# IDE
+.idea/

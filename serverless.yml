@@ -1,0 +1,90 @@
+service: MonteCarloVisualization
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: dev
+  region: eu-west-2
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+# you can define service wide environment variables here
+#  environment:
+#    variable1: value1
+
+custom:
+  functionsBasePath: BE/src
+  s3Sync:
+    - bucketName: montecarlovisualization
+      localDir: UI
+      acl: public-read # optional
+      defaultContentType: text/html # optional
+      params:
+        - index.html:
+            CacheControl: 'no-cache'
+        - "*.js":
+            CacheControl: 'public, max-age=31536000'
+
+package:
+  include:
+    - src/**
+  exclude:
+    - tests/**
+    - requirements.txt
+    - BE/venv37/**
+    - BE/node_modules/**
+    - node_modules/**
+
+functions:
+  main:
+    handler: handler.hello
+    role: lambdaNoAccessRole
+    layers:
+     - arn:aws:lambda:eu-west-2:142628438157:layer:AWSLambda-Python37-SciPy1x:2
+    events:
+      - http:
+          path: visualize
+          method: POST
+          cors: true
+
+resources:
+  Resources:
+    SiteBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: montecarlovisualization
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: error.html
+    lambdaNoAccessRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /montecarlo/
+        RoleName: MonteCarloLambda
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+
+plugins:
+  - serverless-s3-sync
+  - serverless-functions-base-path
