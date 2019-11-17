@@ -25,8 +25,10 @@ def monte_carlo(S0, K, T, sigma, r, q=0, nr_of_steps=50, nr_of_paths=100):
     S = []
     dt = T / nr_of_steps
     for path in range(0, nr_of_paths):
-        S_ = [S0]
-        for step in range(0, nr_of_steps):
+        S_ = [{"val": S0, "step": 0}]
+        for step in range(1, nr_of_steps):
             e = np.random.normal()
-            S_.append(S_[-1] * np.exp(((r - q - (np.sqrt(sigma) / 2)) * dt) + (sigma * e * np.sqrt(dt))))
+            val = S_[-1]["val"] * np.exp(((r - q - (sigma ** 2 / 2)) * dt) + (sigma * e * np.sqrt(dt)))
+            S_.append({"val": val, "step": step})
         S.append(S_)
+    return S

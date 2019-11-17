@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Monte Carlo</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="monte_carlo_chart.js"></script>
+    <link rel="stylesheet" type="text/css" href="chart.css" />
 </head>
 <body>
 
@@ -12,12 +15,14 @@
     <tr><td>T</td><td><input id="input_T" value="0.5" name="dt" /></td></tr>
     <tr><td>sigma</td><td><input id="input_sigma" value="0.2" name="sigma" /></td></tr>
     <tr><td>r</td><td><input id="input_r" value="0.1" name="r" /></td></tr>
+    <tr><td>Steps</td><td><input id="input_steps" value="5" name="steps" /></td></tr>
+    <tr><td>Paths</td><td><input id="input_paths" value="10" name="paths" /></td></tr>
 </table>
 <tr></tr>
 <div>
     <button onClick="Computation()">Computation</button>
-    <span id="result"></span>
 </div>
+<div id="result"></div>
 
 <script>
     function Computation() {
@@ -25,7 +30,7 @@
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 resp = JSON.parse(this.responseText)
-                document.getElementById("result").innerHTML = resp.result
+                plot(resp.result)
             }
         };
         xmlhttp.open("POST", "https://1llnc1nk9g.execute-api.eu-west-2.amazonaws.com/dev/visualize");
@@ -34,7 +39,9 @@
                                      K:parseFloat(document.getElementById("input_K").value),
                                      T:parseFloat(document.getElementById("input_T").value),
                                      sigma:parseFloat(document.getElementById("input_sigma").value),
-                                     r:parseFloat(document.getElementById("input_r").value)}));
+                                     r:parseFloat(document.getElementById("input_r").value),
+                                     nr_of_steps:parseFloat(document.getElementById("input_steps").value),
+                                     nr_of_paths:parseFloat(document.getElementById("input_paths").value)}));
     }
 </script>
 
