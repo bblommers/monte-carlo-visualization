@@ -16,6 +16,17 @@ def black_scholes(S, K, dt, sigma, r):
     :return:
     """
     Phi = stats.norm.cdf
-    d_1 = (np.log(S / K) + (r+sigma**2/2)*dt) / (sigma*np.sqrt(dt))
-    d_2 = d_1 - sigma*np.sqrt(dt)
-    return S*Phi(d_1) - K*np.exp(-r*dt)*Phi(d_2)
+    d_1 = (np.log(S / K) + (r + sigma ** 2 / 2) * dt) / (sigma * np.sqrt(dt))
+    d_2 = d_1 - sigma * np.sqrt(dt)
+    return S * Phi(d_1) - K * np.exp(-r * dt) * Phi(d_2)
+
+
+def monte_carlo(S0, K, T, sigma, r, q=0, nr_of_steps=50, nr_of_paths=100):
+    S = []
+    dt = T / nr_of_steps
+    for path in range(0, nr_of_paths):
+        S_ = [S0]
+        for step in range(0, nr_of_steps):
+            e = np.random.normal()
+            S_.append(S_[-1] * np.exp(((r - q - (np.sqrt(sigma) / 2)) * dt) + (sigma * e * np.sqrt(dt))))
+        S.append(S_)

@@ -9,7 +9,7 @@
 <table>
     <tr><td>S</td><td><input id="input_S" value="42" name="S" /></td></tr>
     <tr><td>K</td><td><input id="input_K" value="40" name="K" /></td></tr>
-    <tr><td>dt</td><td><input id="input_dt" value="0.5" name="dt" /></td></tr>
+    <tr><td>T</td><td><input id="input_T" value="0.5" name="dt" /></td></tr>
     <tr><td>sigma</td><td><input id="input_sigma" value="0.2" name="sigma" /></td></tr>
     <tr><td>r</td><td><input id="input_r" value="0.1" name="r" /></td></tr>
 </table>
@@ -30,9 +30,9 @@
         };
         xmlhttp.open("POST", "https://1llnc1nk9g.execute-api.eu-west-2.amazonaws.com/dev/visualize");
         xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(JSON.stringify({S:parseFloat(document.getElementById("input_S").value),
+        xmlhttp.send(JSON.stringify({S0:parseFloat(document.getElementById("input_S").value),
                                      K:parseFloat(document.getElementById("input_K").value),
-                                     dt:parseFloat(document.getElementById("input_dt").value),
+                                     T:parseFloat(document.getElementById("input_T").value),
                                      sigma:parseFloat(document.getElementById("input_sigma").value),
                                      r:parseFloat(document.getElementById("input_r").value)}));
     }
