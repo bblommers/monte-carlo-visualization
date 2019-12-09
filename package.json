@@ -1,0 +1,10 @@
+{
+  "name": "MonteCarloVisualization",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-functions-base-path": "^1.0.29",
+    "serverless-s3-sync": "^1.9.1"
+  }
+}
